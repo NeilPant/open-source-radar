@@ -358,7 +358,7 @@ CLAIM_PATTERN = re.compile(
     r"\bi(?:'m| am) interested in (?:picking|taking) (?:this|it) (?:up|on)\b",
     re.IGNORECASE,
 )
-QUOTED_REPLY = re.compile(r"^>[^\n]*$|\n\s*On .{0,120}wrote:.*", re.MULTILINE | re.DOTALL)
+QUOTED_REPLY = re.compile(r"^ {0,3}>[^\n]*$|\n\s*On .{0,120}wrote:.*", re.MULTILINE | re.DOTALL)
 
 
 def has_maintainer_reply(issue: dict[str, Any]) -> bool:

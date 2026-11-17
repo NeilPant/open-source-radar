@@ -268,6 +268,10 @@ class RecentlyClaimedTests(unittest.TestCase):
         self.assertTrue(radar.recently_claimed(candidate, CLAIM_SINCE))
         self.assertFalse(radar.issue_is_available(candidate, SINCE, CLAIM_SINCE))
 
+    def test_indented_markdown_quote_is_ignored(self):
+        quoted = comment("Noted, thanks.\n\n  > Can I work on this?")
+        self.assertFalse(radar.recently_claimed(issue(comments={"nodes": [quoted]}), CLAIM_SINCE))
+
     def test_claim_inside_an_email_reply_is_ignored(self):
         reply = comment("Noted, thanks.\n\nOn Monday, Contributor wrote:\nCan I work on this?")
         self.assertFalse(radar.recently_claimed(issue(comments={"nodes": [reply]}), CLAIM_SINCE))

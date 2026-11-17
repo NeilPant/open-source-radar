@@ -262,6 +262,16 @@ class RecentlyClaimedTests(unittest.TestCase):
         quoted = comment("Noted, thanks.\n\n> Can I work on this?")
         self.assertFalse(radar.recently_claimed(issue(comments={"nodes": [quoted]}), CLAIM_SINCE))
 
+    def test_claim_after_a_markdown_quote_is_detected(self):
+        reply = comment("> This issue is available.\n> The reproduction is in the description.\n\nCan I work on this?")
+        candidate = issue(comments={"nodes": [reply]})
+        self.assertTrue(radar.recently_claimed(candidate, CLAIM_SINCE))
+        self.assertFalse(radar.issue_is_available(candidate, SINCE, CLAIM_SINCE))
+
+    def test_claim_inside_an_email_reply_is_ignored(self):
+        reply = comment("Noted, thanks.\n\nOn Monday, Contributor wrote:\nCan I work on this?")
+        self.assertFalse(radar.recently_claimed(issue(comments={"nodes": [reply]}), CLAIM_SINCE))
+
     def test_pick_this_up_is_a_claim(self):
         for body in ("I'm a native hungarian speaker. Can I pick this up?", "Hi, I'm interested in picking this up."):
             self.assertTrue(radar.recently_claimed(issue(comments={"nodes": [comment(body)]}), CLAIM_SINCE), body)
